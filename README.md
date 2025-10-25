@@ -17,6 +17,23 @@ This repository contains the **complete TheStream Android application** with ful
 - ✅ Documentation and configuration guides
 - ✅ All dependencies and resources
 
+## 🎯 Complete Wortise Integration Package
+
+This repository consolidates **everything you need** to get started with Wortise monetization in one place. No need to hunt for files across multiple repositories or documentation sources - it's all here!
+
+### 📚 Quick Navigation
+
+For the fastest way to get up and running:
+
+- **[QUICK_START.md](QUICK_START.md)** - Step-by-step guide to get your app running in minutes
+- **[FILE_MAPPING.md](FILE_MAPPING.md)** - Detailed file-by-file breakdown showing where everything is and what each component does
+
+These guides are designed to help you:
+- 🚀 Get started quickly without reading through extensive documentation
+- 🗺️ Understand the project structure and locate specific files
+- 🔧 Configure Wortise integration correctly
+- 💰 Start monetizing your streaming app right away
+
 ---
 
 ## 📂 File Structure
@@ -78,49 +95,44 @@ cd TheStream-Wortise-Complete
 - Android Studio Arctic Fox (2020.3.1) or later
 - JDK 11 or higher
 - Android SDK (API Level 21 minimum, API Level 33+ recommended)
-- Gradle 7.0+
+- Wortise account with App ID (register at [wortise.com](https://wortise.com))
 
 ### Installation Steps
 
-1. **Open Project in Android Studio**
-   ```
-   File → Open → Navigate to 'android-app' folder
-   ```
+1. **Open Android Studio**
+   - Select `File → Open`
+   - Navigate to `android-app` folder
+   - Click `OK`
 
 2. **Configure Wortise App ID**
    - Open `app/src/main/AndroidManifest.xml`
-   - Replace the placeholder Wortise App ID with your actual App ID:
+   - Replace `YOUR_WORTISE_APP_ID` with your actual Wortise App ID:
    ```xml
    <meta-data
        android:name="com.wortise.ads.APPLICATION_ID"
        android:value="YOUR_WORTISE_APP_ID" />
    ```
 
-3. **Update Package Name (Optional)**
-   - In `build.gradle (app)`, modify the `applicationId` to your unique package name
+3. **Update API Base URL**
+   - Open `app/src/main/java/com/thestream/app/util/ApiConfig.java`
+   - Update `BASE_URL` with your server URL:
+   ```java
+   public static final String BASE_URL = "https://yourdomain.com/api/";
+   ```
 
 4. **Sync Gradle**
-   - Click **Sync Project with Gradle Files** in the toolbar
+   - Click `File → Sync Project with Gradle Files`
    - Wait for dependencies to download
 
 5. **Build APK**
-   ```
-   Build → Build Bundle(s) / APK(s) → Build APK(s)
-   ```
+   - Select `Build → Build Bundle(s) / APK(s) → Build APK(s)`
+   - APK will be generated in `app/build/outputs/apk/debug/`
 
-6. **Install on Device**
-   - Connect your Android device via USB (enable Developer Mode)
-   - Or use an emulator (API Level 30+ recommended)
-   - Click the **Run** button in Android Studio
+### Testing
 
-### Generate Signed APK for Production
-
-1. `Build → Generate Signed Bundle / APK`
-2. Select **APK** and click **Next**
-3. Create or select your keystore
-4. Enter keystore credentials
-5. Select **release** build variant
-6. Click **Finish**
+- Use a physical Android device or emulator
+- Enable `Developer Options` and `USB Debugging` on your device
+- Click `Run` button in Android Studio
 
 ---
 
@@ -130,24 +142,23 @@ cd TheStream-Wortise-Complete
 
 - Web server (Apache/Nginx)
 - PHP 7.4 or higher
-- MySQL 5.7+ or MariaDB 10.3+
-- phpMyAdmin (recommended) or MySQL command line
+- MySQL 5.7 or higher
+- PHPMyAdmin (optional, for easy database management)
 
 ### Installation Steps
 
 1. **Upload Files**
-   - Upload the entire `admin-panel/` folder to your web server
-   - Recommended path: `/var/www/html/thestream-admin/` or `public_html/admin/`
+   - Upload `admin-panel` folder to your web server
+   - Rename to your preferred name (e.g., `thestream-admin`)
 
-2. **Set Permissions**
-   ```bash
-   chmod 755 -R admin-panel/
-   chmod 644 admin-panel/config.php
-   ```
+2. **Create Database**
+   - Access PHPMyAdmin or MySQL command line
+   - Create a new database (e.g., `thestream_db`)
+   - Import `database/thestream.sql`
 
 3. **Configure Database Connection**
    - Open `admin-panel/config.php`
-   - Update with your database credentials:
+   - Update database credentials:
    ```php
    define('DB_HOST', 'localhost');
    define('DB_USER', 'your_username');
@@ -155,141 +166,179 @@ cd TheStream-Wortise-Complete
    define('DB_NAME', 'thestream_db');
    ```
 
-4. **Access Admin Panel**
-   - Navigate to: `http://yourdomain.com/admin-panel/`
-   - Default login credentials:
-     - **Username:** admin
-     - **Password:** admin123
-   - ⚠️ **IMPORTANT:** Change default password immediately after first login!
+4. **Set Permissions**
+   ```bash
+   chmod 755 admin-panel/
+   chmod 644 admin-panel/config.php
+   chmod 755 admin-panel/uploads/
+   ```
 
-5. **Security Recommendations**
-   - Enable HTTPS/SSL certificate
-   - Change default admin credentials
-   - Restrict admin panel access by IP if possible
-   - Keep PHP and MySQL updated
+5. **Access Admin Panel**
+   - Navigate to `https://yourdomain.com/admin-panel/`
+   - Default credentials:
+     - Username: `admin`
+     - Password: `admin123`
+   - **⚠️ Change default password immediately!**
+
+### Admin Panel Features
+
+- 📊 Dashboard with analytics
+- 📺 Add/Edit/Delete video content
+- 🗂️ Category management
+- 👥 User management
+- 🎬 Channel management
+- 📈 View statistics
+- ⚙️ App settings configuration
 
 ---
 
 ## 🗄️ Database Setup
 
-### Method 1: Using phpMyAdmin
+### Database Schema
 
-1. Open phpMyAdmin in your browser
-2. Click **New** to create a new database
-3. Name it `thestream_db` (or your preferred name)
-4. Select **utf8mb4_unicode_ci** collation
-5. Click **Import** tab
-6. Choose file: `database/thestream.sql`
-7. Click **Go** to execute
+The `thestream.sql` file includes:
 
-### Method 2: Using MySQL Command Line
+- Users table
+- Videos table
+- Categories table
+- Channels table
+- Playlists table
+- Comments table
+- Likes table
+- Watch history table
+- App settings table
 
-```bash
-# Create database
-mysql -u root -p -e "CREATE DATABASE thestream_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+### Manual Database Setup
 
-# Import SQL file
-mysql -u root -p thestream_db < database/thestream.sql
-
-# Grant permissions (if using separate user)
-mysql -u root -p -e "GRANT ALL PRIVILEGES ON thestream_db.* TO 'your_username'@'localhost'; FLUSH PRIVILEGES;"
-```
-
-### Database Configuration in Android App
-
-1. Open `app/src/main/java/com/thestream/config/ApiConfig.java`
-2. Update the API base URL:
-   ```java
-   public static final String BASE_URL = "https://yourdomain.com/admin-panel/api/";
+1. **Create Database**
+   ```sql
+   CREATE DATABASE thestream_db;
    ```
+
+2. **Import SQL File**
+   ```bash
+   mysql -u username -p thestream_db < database/thestream.sql
+   ```
+
+3. **Verify Import**
+   ```sql
+   USE thestream_db;
+   SHOW TABLES;
+   ```
+
+### Sample Data
+
+The SQL file includes sample data for:
+- Categories (Movies, Series, Sports, etc.)
+- Sample videos
+- Admin user account
+- Default app settings
 
 ---
 
 ## 🚀 Quick Start Guide
 
-### Step-by-Step for Complete Setup
+### Complete Setup in 15 Minutes
 
-**Step 1: Database Setup** (15 minutes)
-- [ ] Create MySQL database
-- [ ] Import `database/thestream.sql`
-- [ ] Verify tables created successfully
+1. **Setup Database (3 minutes)**
+   - Create MySQL database
+   - Import `thestream.sql`
+   - Note credentials
 
-**Step 2: Admin Panel** (20 minutes)
-- [ ] Upload `admin-panel/` to web server
-- [ ] Configure `config.php` with database credentials
-- [ ] Test admin login
-- [ ] Change default password
-- [ ] Add sample content (movies/TV shows)
+2. **Configure Admin Panel (5 minutes)**
+   - Upload to web server
+   - Edit `config.php`
+   - Login and change password
+   - Add your content
 
-**Step 3: Wortise Account** (10 minutes)
-- [ ] Sign up at [Wortise.com](https://wortise.com)
-- [ ] Create new Android app in dashboard
-- [ ] Note your App ID
-- [ ] Configure ad units (Banner, Interstitial, Rewarded)
+3. **Setup Android App (7 minutes)**
+   - Open in Android Studio
+   - Update Wortise App ID
+   - Update API URL
+   - Build APK
+   - Install on device
 
-**Step 4: Android App Configuration** (30 minutes)
-- [ ] Open project in Android Studio
-- [ ] Update Wortise App ID in `AndroidManifest.xml`
-- [ ] Update API base URL in `ApiConfig.java`
-- [ ] Change package name (optional but recommended)
-- [ ] Sync Gradle and resolve any dependencies
+### Wortise Integration Notes
 
-**Step 5: Build & Test** (15 minutes)
-- [ ] Build APK in Android Studio
-- [ ] Install on test device/emulator
-- [ ] Test app launch
-- [ ] Verify content loads from admin panel
-- [ ] Test ad displays (may show test ads initially)
+- **Banner Ads**: Shown at bottom of video player
+- **Interstitial Ads**: Shown between video transitions
+- **Rewarded Ads**: Users watch to unlock premium content
+- **Native Ads**: In video list and homepage
 
-**Step 6: Production Release** (30 minutes)
-- [ ] Generate signed APK with release keystore
-- [ ] Test signed APK thoroughly
-- [ ] Prepare Play Store listing
-- [ ] Upload to Google Play Console
-- [ ] Submit for review
+### Testing Wortise Ads
 
-**Total Estimated Time:** ~2 hours
+1. Use test mode initially:
+   ```java
+   Wortise.setTestMode(true);
+   ```
+
+2. Once verified, disable test mode for production:
+   ```java
+   Wortise.setTestMode(false);
+   ```
+
+3. Verify in Wortise dashboard:
+   - Check ad impressions
+   - Monitor click-through rates
+   - Review earnings
 
 ---
 
 ## ✅ Testing Checklist
 
-### Pre-Release Testing
+### Android App
 
-#### Android App
-- [ ] App launches without crashes
-- [ ] Splash screen displays correctly
-- [ ] Content loads from database via API
-- [ ] Video player functions properly
-- [ ] Navigation between screens works
-- [ ] Search functionality works
-- [ ] User registration/login works (if applicable)
-- [ ] Favorites/watchlist functions properly
+#### Installation
+- [ ] App installs successfully
+- [ ] App opens without crashes
+- [ ] Splash screen displays
+- [ ] Home screen loads
 
-#### Wortise Ads Integration
+#### Wortise Ads
 - [ ] Banner ads load and display
-- [ ] Interstitial ads show at appropriate times
-- [ ] Rewarded video ads function correctly
-- [ ] Ad callbacks handled properly
+- [ ] Interstitial ads show at correct intervals
+- [ ] Rewarded ads can be watched
+- [ ] Native ads appear in lists
 - [ ] No ad-related crashes
-- [ ] Test ads display (before production)
-- [ ] Production ads display (after Wortise approval)
+- [ ] Ads respect test mode setting
 
-#### Admin Panel
-- [ ] Login works with correct credentials
-- [ ] Dashboard loads all statistics
-- [ ] Can add new content (movies/shows)
-- [ ] Can edit existing content
-- [ ] Can delete content
-- [ ] Image uploads work
-- [ ] API endpoints return correct data
-- [ ] User management functions work
-- [ ] Settings save correctly
+#### Functionality
+- [ ] Videos load and play
+- [ ] Categories display correctly
+- [ ] Search works
+- [ ] User registration/login works
+- [ ] Favorites can be added/removed
+- [ ] Comments can be posted
+- [ ] Share functionality works
 
-#### Database
-- [ ] All tables created successfully
-- [ ] Sample data imported correctly
-- [ ] Database connections stable
+#### Network
+- [ ] API endpoints respond correctly
+- [ ] Images load properly
+- [ ] Videos stream smoothly
+- [ ] Error handling works offline
+
+### Admin Panel
+
+#### Access
+- [ ] Can login successfully
+- [ ] Dashboard loads
+- [ ] All menu items accessible
+
+#### Content Management
+- [ ] Can add new videos
+- [ ] Can edit existing videos
+- [ ] Can delete videos
+- [ ] Can upload thumbnails
+- [ ] Can manage categories
+
+#### User Management
+- [ ] User list displays
+- [ ] Can view user details
+- [ ] Can ban/unban users
+
+### Database
+
+#### Performance
 - [ ] Queries execute efficiently
 - [ ] Backups configured
 
